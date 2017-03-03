@@ -41,12 +41,12 @@ questReq.addEventListener("load", function()
 		{
 			console.log("Error in network request: " + questReq.statusText);
 		}
-		checkDailies();
+		checkDailies(questData);
 	});
 questReq.send(null);
 
 // Check daily quest completion
-function checkDailies()
+function checkDailies(questData)
 {
 	var questList = questData.quests;
 	var questLength = questList.length;
@@ -70,7 +70,7 @@ aucReq.addEventListener("load", function()
 	{
 		if(aucReq.status >= 200 && aucReq.status < 400)
 		{
-			var aucResp = JSON.parse(aucResp.responseText);
+			var aucResp = JSON.parse(aucReq.responseText);
 			console.log("Auction data retrieved.");
 			var aucFile = aucResp.files[0].url;
 			var aucData = JSON.parse(aucFile.getContentText());
@@ -79,12 +79,13 @@ aucReq.addEventListener("load", function()
 		{
 			console.log("Error in network request: " + aucReq.statusText);
 		}
+		checkAuctions(aucData);
 	});
 aucReq.send(null);
 
 
 // Process auction data
-function checkAuctions()
+function checkAuctions(aucData)
 {
 	var auctionList = aucData.auctions;
 	var aLength = auctionList.length;
