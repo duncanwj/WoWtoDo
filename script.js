@@ -20,11 +20,18 @@ achReq.addEventListener("load", function()
 		}
 	});
 achReq.send(null);
-event.preventDefault();
+
+// Update character data
+document.getElementById('charname').textContent = achData.name;
+document.getElementById('charrealm').textContent = achData.realm;
+document.getElementById('charbg').textContent = achData.battlegroup;
+document.getElementById('charachp').textContent = achData.achievementPoints;
+document.getElementById('charhks').textContent = achData.totalHonorableKills;
+
 
 // Get character quest data
 var questReq = new XMLHttpRequest();
-questReq.open("GET", "https://us.api.battle.net/wow/character/" + myRealm + "/"+ myCharacter + "?fields=quests&" + myLocale + "&apikey=" + apiKey, true);
+questReq.open("GET", "https://us.api.battle.net/wow/character/" + myRealm + "/"+ myCharacter + "?fields=quests&locale=" + myLocale + "&apikey=" + apiKey, true);
 questReq.addEventListener("load", function()
 	{
 		if(questReq.status >= 200 && questReq.status < 400)
@@ -38,14 +45,21 @@ questReq.addEventListener("load", function()
 		}
 	});
 questReq.send(null);
-event.preventDefault();
 
-// Update character data
-document.getElementById('charname').textContent = achData.name;
-document.getElementById('charrealm').textContent = achData.realm;
-document.getElementById('charbg').textContent = achData.battlegroup;
-document.getElementById('charachp').textContent = achData.achievementPoints;
-document.getElementById('charhks').textContent = achData.totalHonorableKills;
+// Check daily quest completion
+var questList = questData.quests;
+var questLength = questList.length;
+document.getElementById('btsixk').textContent = "Incomplete"; //Blingtron 6000
+for (var i = 0; i<questLength; i++)
+{
+	var curQuest = questList[i];
+	if (curQuest == 40753) //Blingtron 6000
+	{
+		document.getElementById('btsixk').textContent = "Completed!";
+	}
+}
+
+
 
 // Get auction house snapshot
 var aucReq = new XMLHttpRequest();
@@ -65,7 +79,7 @@ aucReq.addEventListener("load", function()
 		}
 	});
 aucReq.send(null);
-event.preventDefault();
+
 
 // Process auction data
 var auctionList = aucData.auctions;
