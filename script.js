@@ -18,16 +18,14 @@ achReq.addEventListener("load", function()
 		{
 			console.log("Error in network request: " + achReq.statusText);
 		}
+		// Update character data
+		document.getElementById('charname').textContent = achData.name;
+		document.getElementById('charrealm').textContent = achData.realm;
+		document.getElementById('charbg').textContent = achData.battlegroup;
+		document.getElementById('charachp').textContent = achData.achievementPoints;
+		document.getElementById('charhks').textContent = achData.totalHonorableKills;
 	});
 achReq.send(null);
-
-// Update character data
-document.getElementById('charname').textContent = achData.name;
-document.getElementById('charrealm').textContent = achData.realm;
-document.getElementById('charbg').textContent = achData.battlegroup;
-document.getElementById('charachp').textContent = achData.achievementPoints;
-document.getElementById('charhks').textContent = achData.totalHonorableKills;
-
 
 // Get character quest data
 var questReq = new XMLHttpRequest();
@@ -43,19 +41,23 @@ questReq.addEventListener("load", function()
 		{
 			console.log("Error in network request: " + questReq.statusText);
 		}
+		checkDailies();
 	});
 questReq.send(null);
 
 // Check daily quest completion
-var questList = questData.quests;
-var questLength = questList.length;
-document.getElementById('btsixk').textContent = "Incomplete"; //Blingtron 6000
-for (var i = 0; i<questLength; i++)
+function checkDailies()
 {
-	var curQuest = questList[i];
-	if (curQuest == 40753) //Blingtron 6000
+	var questList = questData.quests;
+	var questLength = questList.length;
+	document.getElementById('btsixk').textContent = "Incomplete"; //Blingtron 6000
+	for (var i = 0; i<questLength; i++)
 	{
-		document.getElementById('btsixk').textContent = "Completed!";
+		var curQuest = questList[i];
+		if (curQuest == 40753) //Blingtron 6000
+		{
+			document.getElementById('btsixk').textContent = "Completed!";
+		}
 	}
 }
 
@@ -82,41 +84,44 @@ aucReq.send(null);
 
 
 // Process auction data
-var auctionList = aucData.auctions;
-var aLength = auctionList.length;
-var leylightArr = []; //item=124441 
-var arkhanaArr = []; //item=124440
-for (var i = 0; i<aLength; i++)
+function checkAuctions()
 {
-	var curAuc = auctionList[i];
-	if (curAuc.item == 124441)
+	var auctionList = aucData.auctions;
+	var aLength = auctionList.length;
+	var leylightArr = []; //item=124441 
+	var arkhanaArr = []; //item=124440
+	for (var i = 0; i<aLength; i++)
 	{
-		leylightArr.push(curAuc.buyout/curAuc.quantity);
+		var curAuc = auctionList[i];
+		if (curAuc.item == 124441)
+		{
+			leylightArr.push(curAuc.buyout/curAuc.quantity);
+		}
+		else if(curAuc.item == 124440)
+		{
+			arkhanaArr.push(curAuc.buyout/curAuc.quantity);
+		}
 	}
-	else if(curAuc.item == 124440)
+	var leyAvg = leylightArr.sum()/leylightArr.length;
+	var arkAvg = arkhanaArr.sum()/arkhanaArr.length;
+	var leyShatter;
+	if ((arkAvg*3) > leyAvg)
 	{
-		arkhanaArr.push(curAuc.buyout/curAuc.quantity);
+		leyShatter = 1;
 	}
+	else 
+	{
+		leyShatter = 0;
+	}
+	// Update with auction data
+	document.getElementById('leyprice').textContent = leyAvg;
+	document.getElementById('arkprice').textContent = arkAvg;
+	if(leyShatter == 1)
+		{
+			document.getElementById('shatterley').textContent = "Shatter!";
+		}
+	else
+		{
+			document.getElementById('shatterley').textContent = "Don't shatter!";
+		}
 }
-var leyAvg = leylightArr.sum()/leylightArr.length;
-var arkAvg = arkhanaArr.sum()/arkhanaArr.length;
-var leyShatter;
-if ((arkAvg*3) > leyAvg)
-{
-	leyShatter = 1;
-}
-else 
-{
-	leyShatter = 0;
-}
-// Update with auction data
-document.getElementById('leyprice').textContent = leyAvg;
-document.getElementById('arkprice').textContent = arkAvg;
-if(leyShatter == 1)
-	{
-		document.getElementById('shatterley').textContent = "Shatter!";
-	}
-else
-	{
-		document.getElementById('shatterley').textContent = "Don't shatter!";
-	}
