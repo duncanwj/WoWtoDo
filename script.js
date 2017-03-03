@@ -6,7 +6,7 @@ var myRealm = 'thrall';
 
 // Get character achievement data
 var achReq = new XMLHttpRequest();
-achReq.open("GET", "https://us.api.battle.net/wow/character/" + myRealm + "/"+ myCharacter + "?fields=achievements&" + myLocale + "&apikey=" + apiKey, true);
+achReq.open("GET", "https://us.api.battle.net/wow/character/" + myRealm + "/"+ myCharacter + "?fields=achievements&locale=" + myLocale + "&apikey=" + apiKey, true);
 achReq.addEventListener("load", function()
 	{
 		if(achReq.status >= 200 && achReq.status < 400)
@@ -39,6 +39,13 @@ questReq.addEventListener("load", function()
 	});
 questReq.send(null);
 event.preventDefault();
+
+// Update character data
+document.getElementById('charname').textContent = achData.name;
+document.getElementById('charrealm').textContent = achData.realm;
+document.getElementById('charbg').textContent = achData.battlegroup;
+document.getElementById('charachp').textContent = achData.achievementPoints;
+document.getElementById('charhks').textContent = achData.totalHonorableKills;
 
 // Get auction house snapshot
 var aucReq = new XMLHttpRequest();
@@ -88,3 +95,14 @@ else
 {
 	leyShatter = 0;
 }
+// Update with auction data
+document.getElementById('leyprice').textContent = leyAvg;
+document.getElementById('arkprice').textContent = arkAvg;
+if(leyShatter == 1)
+	{
+		document.getElementById('shatterley').textContent = "Shatter!";
+	}
+else
+	{
+		document.getElementById('shatterley').textContent = "Don't shatter!";
+	}
