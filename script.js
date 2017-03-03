@@ -78,26 +78,29 @@ aucReq.addEventListener("load", function()
 		{
 			console.log("Error in network request: " + aucReq.statusText);
 		}
-		var aucReqtwo = new XMLHttpRequest();
-		aucReqtwo.open("GET", aucFile, true)
-		aucReqtwo.addEventListener("load", function()
-		{
-			if(aucReqtwo.status >= 200 && aucReqtwo.status < 400)
-			{
-			var aucData = JSON.parse(aucReqtwo.responseText);
-			console.log("Auction data retrieved.");
-			}
-			else
-			{
-				console.log("Error in network request: " + aucReqtwo.statusText);
-			}
-			checkAuctions(aucData);
-		});
-		aucReqtwo.send(null);
+		
 	});
 aucReq.send(null);
 
-
+function grabAHData(aucFile)
+{
+	var aucReqtwo = new XMLHttpRequest();
+	aucReqtwo.open("GET", aucFile, true)
+	aucReqtwo.addEventListener("load", function()
+	{
+		if(aucReqtwo.status >= 200 && aucReqtwo.status < 400)
+		{
+		var aucData = JSON.parse(aucReqtwo.responseText);
+		console.log("Auction data retrieved.");
+		}
+		else
+		{
+			console.log("Error in network request: " + aucReqtwo.statusText);
+		}
+		checkAuctions(aucData);
+	});
+	aucReqtwo.send(null);
+}
 // Process auction data
 function checkAuctions(aucData)
 {
