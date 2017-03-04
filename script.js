@@ -78,7 +78,7 @@ aucReq.addEventListener("load", function()
 		{
 			console.log("Error in network request: " + aucReq.statusText);
 		}
-		
+		grabAHData(aucFile);
 	});
 aucReq.send(null);
 
