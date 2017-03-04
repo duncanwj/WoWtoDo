@@ -90,7 +90,7 @@ function grabAHData(aucFile)
 	{
 		if(aucReqtwo.status >= 200 && aucReqtwo.status < 400)
 		{
-		var aucData = JSON.parse(aucReqtwo.responseText);
+		var aucData = evalJSON(aucReqtwo.responseText);
 		console.log("Auction data retrieved.");
 		}
 		else
@@ -101,6 +101,12 @@ function grabAHData(aucFile)
 	});
 	aucReqtwo.send(null);
 }
+
+function evalJSON(json)
+{
+	return eval("(" + json + ")");
+}
+
 // Process auction data
 function checkAuctions(aucData)
 {
